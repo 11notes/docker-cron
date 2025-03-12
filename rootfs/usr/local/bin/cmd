@@ -1,0 +1,2 @@
+#!/bin/ash
+  curl --unix-socket ${1} http:/cmd -H 'Content-Type: application/json' -d '{"bin":"'${2}'", "args":['${3}']}'
