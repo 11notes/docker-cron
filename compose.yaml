@@ -1,7 +1,7 @@
 name: "cron"
 services:
   cron:
-    image: "11notes/cron:1.37.0"
+    image: "11notes/cron:4.6"
     container_name: "cron"
     environment:
       TZ: "Europe/Zurich"
