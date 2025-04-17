@@ -1,0 +1,2 @@
+#!/bin/ash
+  curl --unix-socket /run/cmd/cmd.sock http:/cmd -H 'Content-Type: application/json' -d ${1}

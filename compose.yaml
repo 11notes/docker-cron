@@ -1,11 +1,10 @@
 name: "cron"
 services:
   cron:
-    image: "11notes/cron:1.37.0"
-    container_name: "cron"
+    image: "11notes/cron:4.6"
     environment:
       TZ: "Europe/Zurich"
       CRONTAB: |-
         * * * * * eleven log info "I run every minute" > /proc/1/fd/1
-        0 3 * * * cmd /run/cmd/.sock backup > /proc/1/fd/1
+        0 3 * * * cmd-socket '{"bin":"df", "arguments":["-h"]}' > /proc/1/fd/1
     restart: "always"

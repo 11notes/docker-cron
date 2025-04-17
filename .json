@@ -15,8 +15,7 @@
       "image":"11notes/alpine:stable"
     },
     "built":{
-      "dcron":"https://github.com/ptchinster/dcron",
-      "cmd-socket":"https://github.com/11notes/go-cmd-socket"
+      "dcron":"https://github.com/ptchinster/dcron"
     }
   }
 }
