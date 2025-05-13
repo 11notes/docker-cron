@@ -17,8 +17,8 @@ services:
     environment:
       TZ: "Europe/Zurich"
       CRONTAB: |-
-        * * * * * eleven log info "I run every minute" > /proc/1/fd/1
-        0 3 * * * cmd-socket '{"bin":"df", "arguments":["-h"]}' > /proc/1/fd/1
+        * * * * * eleven log info "I run every minute" >> /proc/1/fd/1
+        0 3 * * * cmd-socket '{"bin":"df", "arguments":["-h"]}' >> /proc/1/fd/1
     restart: "always"
 ```
 
@@ -71,4 +71,4 @@ docker pull quay.io/11notes/cron:4.6
 # ElevenNotes™️
 This image is provided to you at your own risk. Always make backups before updating an image to a different version. Check the [releases](https://github.com/11notes/docker-cron/releases) for breaking changes. If you have any problems with using this image simply raise an [issue](https://github.com/11notes/docker-cron/issues), thanks. If you have a question or inputs please create a new [discussion](https://github.com/11notes/docker-cron/discussions) instead of an issue. You can find all my other repositories on [github](https://github.com/11notes?tab=repositories).
 
-*created 09.05.2025, 10:54:34 (CET)*
+*created 13.05.2025, 15:58:54 (CET)*
