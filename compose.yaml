@@ -5,6 +5,6 @@ services:
     environment:
       TZ: "Europe/Zurich"
       CRONTAB: |-
-        * * * * * eleven log info "I run every minute" > /proc/1/fd/1
-        0 3 * * * cmd-socket '{"bin":"df", "arguments":["-h"]}' > /proc/1/fd/1
+        * * * * * eleven log info "I run every minute" >> /proc/1/fd/1
+        0 3 * * * cmd-socket '{"bin":"df", "arguments":["-h"]}' >> /proc/1/fd/1
     restart: "always"
