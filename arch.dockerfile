@@ -8,6 +8,7 @@
   # :: FOREIGN IMAGES
   FROM 11notes/util AS util
   FROM 11notes/util:bin AS util-bin
+  FROM 11notes/distroless:curl as distroless-curl
 
 # ╔═════════════════════════════════════════════════════╗
 # ║                       BUILD                         ║
@@ -70,11 +71,15 @@
     ENV APP_IMAGE=${APP_IMAGE} \
         APP_NAME=${APP_NAME} \
         APP_VERSION=${APP_VERSION} \
-        APP_ROOT=${APP_ROOT}
+        APP_ROOT=${APP_ROOT} \
+        TEMP=${APP_ROOT}/tmp \
+        TMP=${APP_ROOT}/tmp \
+        TMPDIR=${APP_ROOT}/tmp
 
   # :: multi-stage
     COPY --from=util / /
     COPY --from=build /distroless/ /
+    COPY --from=distroless-curl / /
 
 # :: SETUP
   USER root
@@ -83,7 +88,7 @@
     RUN set -ex; \
       apk --update --no-cache --virtual .setup add \
         libcap-setcap; \
-      eleven mkdir ${APP_ROOT}/{etc,var}; \
+      eleven mkdir ${APP_ROOT}/{etc,var,tmp}; \
       mkdir -p ${APP_ROOT}/etc/cron.d;
 
   # :: copy filesystem changes and set correct permissions
