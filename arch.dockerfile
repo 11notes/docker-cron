@@ -7,13 +7,14 @@
 
   # :: FOREIGN IMAGES
   FROM 11notes/util AS util
+  FROM 11notes/util:bin AS util-bin
 
 # ╔═════════════════════════════════════════════════════╗
 # ║                       BUILD                         ║
 # ╚═════════════════════════════════════════════════════╝
 
   FROM alpine AS build
-  COPY --from=util /usr/local/bin /usr/local/bin
+  COPY --from=util-bin / /
   USER root
 
   ARG APP_VERSION \
@@ -26,7 +27,6 @@
   RUN set -ex; \
     apk --update --no-cache add \
       build-base \
-      upx \
       clang \
       make \
       cmake \
@@ -34,7 +34,7 @@
       git;
 
   RUN set -ex; \
-    git clone https://github.com/ptchinster/dcron -b v${APP_VERSION}; \
+    eleven git clone ptchinster/dcron.git v${APP_VERSION}; \
     sed -i 's/VERSION = .\+/VERSION = '${APP_VERSION}'/' ${BUILD_ROOT}/Makefile;
  
   RUN set -ex; \
@@ -48,10 +48,7 @@
       LDFLAGS="-static";
 
   RUN set -ex; \
-    eleven checkStatic ${BUILD_BIN}; \
-    eleven strip ${BUILD_BIN}; \
-    mkdir -p /distroless/usr/local/bin; \
-    cp ${BUILD_BIN} /distroless/usr/local/bin;
+    eleven distroless ${BUILD_BIN};
 
 # ╔═════════════════════════════════════════════════════╗
 # ║                       IMAGE                         ║
@@ -76,12 +73,11 @@
         APP_ROOT=${APP_ROOT}
 
   # :: multi-stage
-    COPY --from=util /usr/local/bin /usr/local/bin
-    COPY --from=build /distroless/usr/local/bin /usr/local/bin
+    COPY --from=util / /
+    COPY --from=build /distroless/ /
 
 # :: SETUP
   USER root
-  RUN eleven printenv;
 
   # :: install application
     RUN set -ex; \
@@ -108,5 +104,6 @@
   HEALTHCHECK --interval=5s --timeout=2s --start-period=5s \
     CMD ps aux | grep -q "/usr/local/bin/crond"
 
-# :: RUN
+# :: EXECUTE
   USER ${APP_UID}:${APP_GID}
+  ENTRYPOINT ["/usr/local/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
