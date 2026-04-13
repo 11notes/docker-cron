@@ -1,6 +1,6 @@
 name: "cron"
 services:
-  app:
+  tab:
     image: "11notes/cron:4.6"
     environment:
       TZ: "Europe/Zurich"
